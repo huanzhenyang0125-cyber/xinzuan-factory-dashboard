@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0866ff"><meta name="description" content="新钻经营看板：年度经营、采购分析与预算测算"><title>新钻 · 经营看板</title><link rel="stylesheet" href="styles.css"><script defer src="app.js"></script></head>
+<body>
+<button class="menu-scrim" id="menuScrim" aria-label="收起菜单"></button>
+<aside class="sidebar" aria-label="主菜单">
+  <button class="menu-toggle" id="menuToggle" aria-label="收起菜单" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg><span>收起菜单</span></button>
+  <div class="brand">新钻</div>
+  <nav id="navigation">
+    <button class="nav active" data-page="overview" aria-current="page" aria-label="经营概览" title="经营概览"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg><span>经营概览</span></button>
+    <button class="nav" data-page="purchase" aria-label="采购分析" title="采购分析"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10h4v10M10 20V4h4v16M16 20v-7h4v7"/></svg><span>采购分析</span></button>
+    <button class="nav" data-page="budget" aria-label="预算测算" title="预算测算"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18M8 3v6M16 9v6M10 15v6"/></svg><span>预算测算</span></button>
+    <button class="nav" data-page="quality" aria-label="质量预测" title="质量预测"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4v6c0 4-8 8-8 8s-8-4-8-8V7zM8 12l3 3 5-6"/></svg><span>质量预测</span></button>
+    <button class="nav" data-page="ledger" aria-label="年度台账" title="年度台账"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v16H3zM3 9h18M3 14h18M9 4v16"/></svg><span>年度台账</span></button>
+  </nav>
+</aside>
+<main>
+  <header class="topbar"><h1 id="pageTitle">经营概览</h1><div class="year-control"><span id="yearNote" class="year-note" hidden>期间待核</span><label for="year">年度</label><select id="year" aria-label="年度"></select></div></header>
+  <section class="metrics" id="metrics" aria-label="经营指标">
+    <div class="metric"><span>销售额</span><strong id="salesMetric"></strong></div>
+    <div class="metric"><span title="仅汇总已录入项目">采购金额 <small class="info" title="仅汇总已录入项目" aria-label="仅汇总已录入项目">i</small></span><strong id="purchaseMetric"></strong></div>
+    <div class="metric"><span>采购销售比</span><strong id="ratioMetric"></strong></div>
+  </section>
+  <section class="glass budget-panel" id="budgetPanel" aria-labelledby="budgetTitle">
+    <div class="section-head"><h2 id="budgetTitle">预算测算</h2><button class="reset" id="reset">恢复原值</button></div>
+    <div class="budget-grid">
+      <article class="budget-item"><div class="control-head"><label for="salesRange">销售增减</label><output id="salesPercent" for="salesRange">0%</output></div><div class="control-row"><input id="salesRange" aria-label="销售增减" type="range" min="-50" max="50" step="1" value="0"><label class="number-label"><span class="sr-only">销售增减百分比</span><input id="salesNumber" aria-label="销售增减百分比" type="number" min="-50" max="50" step="1" value="0"><span>%</span></label></div><div class="budget-chart" id="salesBudget" aria-label="销售额原值与测算值柱状图"></div></article>
+      <article class="budget-item"><div class="control-head"><label for="purchaseRange">采购增减</label><output id="purchasePercent" for="purchaseRange">0%</output></div><div class="control-row"><input id="purchaseRange" aria-label="采购增减" type="range" min="-50" max="50" step="1" value="0"><label class="number-label"><span class="sr-only">采购增减百分比</span><input id="purchaseNumber" aria-label="采购增减百分比" type="number" min="-50" max="50" step="1" value="0"><span>%</span></label></div><div class="budget-chart" id="purchaseBudget" aria-label="采购额原值与测算值柱状图"></div></article>
+    </div>
+    <div class="budget-ratio">测算采购销售比 <strong id="budgetRatio" aria-live="polite"></strong></div>
+  </section>
+  <section class="analysis-grid" id="analysisPanel">
+    <article class="glass history-panel"><div class="section-head"><h2>年度趋势</h2><div class="segmented" role="group" aria-label="趋势指标"><button id="showSales" aria-pressed="false">销售额</button><button id="showPurchase" class="active" aria-pressed="true">采购金额</button></div></div><div class="chart-unit">万元</div><div class="history-chart" id="historyChart" aria-label="年度趋势柱状图"></div></article>
+    <article class="glass composition-panel"><h2>采购构成</h2><div class="ring-wrap"><div class="ring" id="ring" role="img" aria-label="采购构成"><div class="ring-inner"><strong id="ringAmount"></strong><span>万元</span></div></div></div><div id="composition" class="composition"></div></article>
+  </section>
+  <section class="glass quality-panel" id="qualityPanel" hidden><h2>生产数据待接入</h2></section>
+  <section class="glass ledger-panel" id="ledgerPanel" hidden><div class="table-scroll"><table><thead><tr><th>年度</th><th>销售额（元）</th><th>油漆（元）</th><th>兴源（元）</th><th>油墨（元）</th><th>已记录合计（元）</th><th>采购销售比</th></tr></thead><tbody id="ledger"></tbody></table></div></section>
+</main>
+</body></html>
