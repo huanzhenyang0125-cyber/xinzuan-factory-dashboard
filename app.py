@@ -158,7 +158,7 @@ def simulation():
         assumed_sales=None if row[1] is None else row[1]*(1+st.session_state.sales_adjust/100)
         assumed_purchase=amount*(1+st.session_state.cost_adjust/100)
         st.caption('测算采购销售比　'+proportion(assumed_purchase,assumed_sales))
-        
+
 
 if page == "经营概览":
     metrics()
@@ -177,7 +177,7 @@ elif page == "采购分析":
     with st.container(key='glass_history'):
         st.subheader("年度趋势")
         bar_chart()
-    
+
 elif page == "预算测算":
     metrics()
     simulation()
